@@ -1,25 +1,28 @@
 import requests
 
-
-def fetch_weather(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        return response.text
-    except requests.RequestException as e:
-        return f"An error occurred: {e}"
-
+def fetch_weather(base_url, params):
+    response = requests.get(base_url, params=params)
+    response.raise_for_status()
+    return response.text
 
 def generate_url(location):
-    base_url = "https://wttr.in/{}?n?m??q?TMTqu&lang=ru"
-    return base_url.format(location)
-
+    return f"https://wttr.in/{location}"
 
 def main():
+    params = {
+        'n': '',
+        'm': '',
+        'q': '',
+        'T': '',
+        'M': '',
+        'lang': 'ru'
+    }
+
+
     locations = ["лондон", "аэропорт шереметьево", "череповец"]
     for location in locations:
-        url = generate_url(location)
-        weather_data = fetch_weather(url)
+        base_url = generate_url(location)
+        weather_data = fetch_weather(base_url, params)
         print(weather_data)
         print("\n" + "=" * 50 + "\n")
 
